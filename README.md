@@ -18,6 +18,8 @@ I basically see this as a part of a larger pipeline when you, off the top of the
 
 ## Usage
 
+`$ clawk options expression`
+
 By default, each line of stdin is trimmed and then bound to `$` and then the provided code is evaluated. Blank lines are dropped:
 
 ```

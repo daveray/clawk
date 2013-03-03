@@ -5,6 +5,7 @@ Kinda like awk, but Clojure. Reads each line of stdin, binds it to `$` and evalu
 Pros:
 
 * I don't really know awk. I do know Clojure.
+* Doing the `reader/line-seq/doseq/split/print` dance in Clojure is tedious.
 * If you happen to have files where each record is a clojure data structure, awk and friends don't help.
 
 Cons:
@@ -12,6 +13,8 @@ Cons:
 * Awk and friends have many man years put into them. Clawk has a couple man hours.
 * JVM Startup time. When the file's big enough, this doesn't bug me much.
 * Speed. For a task that awk can do, I can't imagine it not being way, way, way, way faster than this.
+
+I basically see this as a part of a larger pipeline when you, off the top of the your head, you can do something easier with Clawk than with `sed`, `grep`, `cut`, `tr`, and all the others.
 
 ## Usage
 
@@ -23,6 +26,8 @@ $ echo -e "1\n 2 \n \n4\n" | clawk '(identity $)'
 2
 4
 ```
+
+*of course you could just use `$` and omit `identity`*
 
 ### As Clojure Data
 
@@ -61,6 +66,8 @@ $ echo -e "1\n2\n3\n4\n5\n6\n" | clawk -r '(if (< 4 (* $ $) 30) $)'
 5
 ```
 
+*and, of course, this is no replacement for `grep` for filtering on regex*
+
 ### Delimiters
 
 If you specify a delimiter with `-d`, then each line is split and `$` is bound to the resulting vector:
@@ -71,6 +78,8 @@ $ echo -e "1,2,3\n4,5,6\n7,8,9\n" | clawk -d ',' '($ 1)'
 5
 8
 ```
+
+*of course you'd just use `cut` for this*
 
 and combining `-d` with `-r`, `clojure.end/read-string` is applied to each field:
 

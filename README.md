@@ -18,7 +18,7 @@ Cons:
 By default, each line of stdin is trimmed and then bound to `$` and then the provided code is evaluated. Blank lines are dropped:
 
 ```
-$ echo -e "1\n 2 \n \n4\n" | target/clawk '(identity $)'
+$ echo -e "1\n 2 \n \n4\n" | clawk '(identity $)'
 1
 2
 4
@@ -29,7 +29,7 @@ $ echo -e "1\n 2 \n \n4\n" | target/clawk '(identity $)'
 The `-r` option applies `clojure.edn/read-string` to the line before binding the value to `$`.
 
 ```
-$ echo -e "1\n2\n3\n" | target/clawk -r '(* $ $)'
+$ echo -e "1\n2\n3\n" | clawk -r '(* $ $)'
 1
 4
 9
@@ -41,12 +41,12 @@ Similarly, the `-p` option applies `prn` to the result of each line rather than 
 
 ```
 # Without -p
-$ echo -e "abc\ndef\n" | target/clawk '{:value $}'
+$ echo -e "abc\ndef\n" | clawk '{:value $}'
 {:value abc}
 {:value def}
 
 # With -p
-$ echo -e "abc\ndef\n" | target/clawk -p '{:value $}'
+$ echo -e "abc\ndef\n" | clawk -p '{:value $}'
 {:value "abc"}
 {:value "def"}
 ```
@@ -55,7 +55,7 @@ $ echo -e "abc\ndef\n" | target/clawk -p '{:value $}'
 If your bit of code returns false-y, no output is written:
 
 ```
-$ echo -e "1\n2\n3\n4\n5\n6\n" | target/clawk -r '(if (< 4 (* $ $) 30) $)'
+$ echo -e "1\n2\n3\n4\n5\n6\n" | clawk -r '(if (< 4 (* $ $) 30) $)'
 3
 4
 5
@@ -66,7 +66,7 @@ $ echo -e "1\n2\n3\n4\n5\n6\n" | target/clawk -r '(if (< 4 (* $ $) 30) $)'
 If you specify a delimiter with `-d`, then each line is split and `$` is bound to the resulting vector:
 
 ```
-$ echo -e "1,2,3\n4,5,6\n7,8,9\n" | target/clawk -d ',' '($ 1)'
+$ echo -e "1,2,3\n4,5,6\n7,8,9\n" | clawk -d ',' '($ 1)'
 2
 5
 8
@@ -75,7 +75,7 @@ $ echo -e "1,2,3\n4,5,6\n7,8,9\n" | target/clawk -d ',' '($ 1)'
 and combining `-d` with `-r`, `clojure.end/read-string` is applied to each field:
 
 ```
-$ echo -e "1,2,3\n4,5,6\n7,8,9\n" | target/clawk -d ',' -r '(reduce * $)'
+$ echo -e "1,2,3\n4,5,6\n7,8,9\n" | clawk -d ',' -r '(reduce * $)'
 6
 120
 504
@@ -84,7 +84,7 @@ $ echo -e "1,2,3\n4,5,6\n7,8,9\n" | target/clawk -d ',' -r '(reduce * $)'
 The value passed to `-d` can also be a regex:
 
 ```
-$ echo -e "foo234bar456yum\nbaz9gar\n" | target/clawk -d '#"\d+"' '(format "%s-%s" ($ 1) ($ 0))'
+$ echo -e "foo234bar456yum\nbaz9gar\n" | clawk -d '#"\d+"' '(format "%s-%s" ($ 1) ($ 0))'
 bar-foo
 gar-baz
 ```
@@ -94,7 +94,7 @@ gar-baz
 The `-i` option lets you run some code before processing starts;
 
 ```
-$ echo -e "2\n3\n4\n5\n6\n" | target/clawk -r -i '(def acc (atom []))' '(swap! acc conj $)'
+$ echo -e "2\n3\n4\n5\n6\n" | clawk -r -i '(def acc (atom []))' '(swap! acc conj $)'
 [2]
 [2 3]
 [2 3 4]

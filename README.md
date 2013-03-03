@@ -24,7 +24,7 @@ $ echo -e "1\n 2 \n \n4\n" | clawk '(identity $)'
 4
 ```
 
-# As Clojure Data
+### As Clojure Data
 
 The `-r` option applies `clojure.edn/read-string` to the line before binding the value to `$`.
 
@@ -51,7 +51,7 @@ $ echo -e "abc\ndef\n" | clawk -p '{:value $}'
 {:value "def"}
 ```
 
-# Filtering
+### Filtering
 If your bit of code returns false-y, no output is written:
 
 ```

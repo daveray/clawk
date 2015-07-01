@@ -117,6 +117,29 @@ $ echo -e "2\n3\n4\n5\n6\n" | clawk -r -i '(def acc (atom []))' '(swap! acc conj
 
 Useful for requiring namespaces or something I think.
 
+### Reading from a File
+
+The `-f` options lets you specify a file to read from.
+
+Assume that data.txt file at the current directory has the following content:
+
+    1
+    2
+    3
+    
+&#8291;
+
+    $ clawk -f data.txt -r '(* $ $)'
+    1
+    4
+    9
+
+### Writing to a File
+
+The `-o` options lets you specify a file to write to.
+
+    $ clawk -f data.txt -o out.txt -r '(* $ $)'
+    
 ## To Build
 
 ```

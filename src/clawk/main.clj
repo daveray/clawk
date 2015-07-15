@@ -53,6 +53,10 @@
        ["-p" "--print-string"
         "If present, non-nil results are printed with prn instead of println."
         :flag true]
+       ["-f" "--file"
+        "If present reads from the given file"]
+       ["-o" "--output"
+        "If present specifies the output file"]
 
        ; TODO option to not trim lines
        ; TODO option to preserve blank lines
@@ -74,15 +78,18 @@
 
         (let [splitter (-> (or (:delimiter opts) identity)
                            (readerize-splitter opts))
+              in       (or (:file opts) *in*)
+              out      (or (:output opts) *out*)
               printer  (if (:print-string opts) prn println)
               handler  (eval `(fn [~'$] ~(read-string code)))]
 
-          (doseq [line (line-seq (io/reader *in*))]
-            (when-let [result (some-> line
-                                      trim-to-nil
-                                      splitter
-                                      handler)]
-              (printer result))))))))
+          (binding [*out* (io/writer out)]
+            (doseq [line (line-seq (io/reader in))]
+              (when-let [result (some-> line
+                                  trim-to-nil
+                                  splitter
+                                  handler)]
+                (printer result)))))))))
 
 (defn -main
   [& args]
